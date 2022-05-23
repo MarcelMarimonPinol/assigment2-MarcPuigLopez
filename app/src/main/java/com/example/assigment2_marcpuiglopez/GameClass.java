@@ -1,4 +1,7 @@
 package com.example.assigment2_marcpuiglopez;
 
-public class GameClass {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class GameClass extends AppCompatActivity {
+
 }
