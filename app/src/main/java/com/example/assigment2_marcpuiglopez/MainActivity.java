@@ -1,42 +1,62 @@
 package com.example.assigment2_marcpuiglopez;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.Button;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.example.assigment2_marcpuiglopez.domain.Player;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 
 public class MainActivity extends AppCompatActivity {
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        EditText nickname = findViewById(R.id.edit_nickname);
-
-        Button confirmButton = findViewById(R.id.button_startgame);
-
-        nickname.setHint(getIntent().getStringExtra("nickname"));
-
-        confirmButton.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.class, GameClass.class);
-            Player company = new Player(
-                    nickname.getText().toString()
-            );
-            setResult(RESULT_OK, intent);
-            finish();
-        });
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_eje, menu);
+        getMenuInflater().inflate(R.menu.toolbar_icon, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.ranking) {
+            Intent intent = new Intent(this, RankingClass.class);
+            startActivity(intent);
+        }
+        return (super.onOptionsItemSelected(item));
+    }
+
+    public void onButtonStart(View view) {
+        Intent intent = new Intent(this, GameClass.class);
+        EditText editTextNickname = findViewById(R.id.edit_nickname);
+        String nickname = editTextNickname.getText().toString();
+
+        if (checkIfValidNickname(nickname)) {
+            intent.putExtra("nickname", nickname);
+            startActivity(intent);
+        } else {
+            Toast toast = Toast.makeText(this, "Invalid Nickname", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    private boolean checkIfValidNickname(String nickname) {
+        if (nickname.equals(null) || nickname.isEmpty())
+            return false;
+        return true;
+    }
 }
