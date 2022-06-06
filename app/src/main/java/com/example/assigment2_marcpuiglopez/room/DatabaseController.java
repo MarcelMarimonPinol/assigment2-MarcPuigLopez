@@ -2,52 +2,53 @@ package com.example.assigment2_marcpuiglopez.room;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
-import com.example.assigment2_marcpuiglopez.domain.User;
-import com.example.assigment2_marcpuiglopez.domain.UserDAO;
+import com.example.assigment2_marcpuiglopez.domain.UserEntity;
+import com.example.assigment2_marcpuiglopez.domain.UserEntityDAO;
 
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class DatabaseController {
-    private UserDAO userDAO;
-    private LiveData<List<User>> allUsers;
+    private UserEntityDAO userDAO;
 
     public DatabaseController(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         userDAO = db.userDAO();
-        allUsers = userDAO.getAll();
     }
 
-    public LiveData<List<User>> fetchAll() {
-        return allUsers;
+    public LiveData<List<UserEntity>> fetchAll() {
+        return userDAO.getAll();
     }
 
-    public void setUser(User user) {
-        new insertAsyncTask(userDAO).execute(user);
+    public void setUser(String nickname, int score) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.nickname = nickname;
+        userEntity.score = score;
+        new insertAsyncTask(userDAO).execute(userEntity);
+    }
+
+    public LiveData<List<UserEntity>> getGamesByNickname(@NonNull final String nickname) {
+        return userDAO.getGamesByNickname(nickname);
     }
 
     private static class insertAsyncTask {
-        private UserDAO asyncDao;
+        private UserEntityDAO asyncDao;
         private Executor executor = Executors.newSingleThreadExecutor();
 
-        insertAsyncTask(UserDAO dao) {
+        insertAsyncTask(UserEntityDAO dao) {
             asyncDao = dao;
         }
 
-        public void execute(User user) {
-            this.doInBackground(user);
+        public void execute(UserEntity userEntity) {
+            this.doInBackground(userEntity);
         }
 
-        private void doInBackground(final User user) {
-            this.executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    asyncDao.insertUser(user);
-                }
-            });
+        private void doInBackground(final UserEntity userEntity) {
+            this.executor.execute(() -> asyncDao.insertUser(userEntity));
         }
     }
 }

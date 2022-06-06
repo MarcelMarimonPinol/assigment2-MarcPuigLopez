@@ -46,10 +46,10 @@ public class MainActivity extends AppCompatActivity {
         String nickname = editTextNickname.getText().toString();
 
         if (checkIfValidNickname(nickname)) {
-            intent.putExtra("nickname", nickname);
+            intent.putExtra(getString(R.string.nickname_hint), nickname);
             startActivity(intent);
         } else {
-            Toast toast = Toast.makeText(this, "Invalid Nickname", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(this, getString(R.string.toast_invalid_nickname), Toast.LENGTH_SHORT);
             toast.show();
         }
     }

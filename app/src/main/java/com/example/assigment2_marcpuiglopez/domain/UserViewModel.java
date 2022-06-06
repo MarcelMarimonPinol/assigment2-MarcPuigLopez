@@ -12,25 +12,23 @@ import java.util.List;
 
 public class UserViewModel extends AndroidViewModel {
     private DatabaseController repository;
-    private LiveData<List<User>> allUsers;
 
     public UserViewModel(@NonNull Application application) {
         super(application);
         repository = new DatabaseController(application);
-        allUsers = repository.fetchAll();
     }
 
-    //la he puesto public
-    public LiveData<List<User>> getAllUsers() {
-        return allUsers;
+    public LiveData<List<UserEntity>> getAllUsers() {
+        return repository.fetchAll();
     }
 
-    public int getGamesPlayed() {
-        return repository.g;
+    public LiveData<List<UserEntity>> getGamesByNickname(@NonNull final String nickname) {
+        return repository.getGamesByNickname(nickname);
     }
 
-    public void insert(User user) {
-        repository.setUser(user);
+    public void insert(String nickname, int score) {
+        repository.setUser(nickname, score);
     }
+
 }
 

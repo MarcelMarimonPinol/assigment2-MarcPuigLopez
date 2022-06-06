@@ -1,30 +1,50 @@
 package com.example.assigment2_marcpuiglopez.domain;
 
-import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-@Entity
-public class User {
+public class User implements Parcelable {
 
-    @PrimaryKey (autoGenerate = true)
-    @NonNull
-    public int gamesPlayed;
-
-    @ColumnInfo(name = "nickname")
-    @NonNull
+    public int gameId;
     public String nickname;
-
-    @ColumnInfo(name = "score")
-    @NonNull
     public int score;
 
-
     public User(String nickname) {
+        this.gameId = 0;
         this.nickname = nickname;
         this.score = 0;
-        this.gamesPlayed = 0;
+    }
+
+    public User(int gameId, String nickname, int score) {
+        this.gameId = gameId;
+        this.nickname = nickname;
+        this.score = score;
+    }
+
+    protected User(Parcel in) {
+        gameId = in.readInt();
+        nickname = in.readString();
+        gameId = in.readInt();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    public int getGamesPlayed() {
+        return gameId;
+    }
+
+    public void setGamesPlayed(int gamesPlayed) {
+        this.gameId = gamesPlayed;
     }
 
     public String getNickname() {
@@ -43,11 +63,15 @@ public class User {
         this.score = score;
     }
 
-    public int getGamesPlayed() {
-        return gamesPlayed;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setGamesPlayed(int gamesPlayed) {
-        this.gamesPlayed = gamesPlayed;
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(gameId);
+        parcel.writeString(nickname);
+        parcel.writeInt(score);
     }
 }

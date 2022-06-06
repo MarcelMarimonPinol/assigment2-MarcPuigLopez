@@ -18,13 +18,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.assigment2_marcpuiglopez.domain.User;
-import com.example.assigment2_marcpuiglopez.domain.UserAdapter;
 import com.example.assigment2_marcpuiglopez.domain.UserViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class GameClass extends AppCompatActivity {
 
@@ -41,8 +38,6 @@ public class GameClass extends AppCompatActivity {
 
     RequestQueue queue;
 
-    private ArrayList<User> dataSet;
-    private UserAdapter todoAdapter;
     UserViewModel viewModel;
 
     @Override
@@ -50,7 +45,7 @@ public class GameClass extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_class);
 
-        String nickname = getIntent().getStringExtra("nickname");
+        String nickname = getIntent().getStringExtra(getString(R.string.nickname_hint));
         user = new User(nickname);
 
         queue = Volley.newRequestQueue(getApplicationContext());
@@ -74,8 +69,6 @@ public class GameClass extends AppCompatActivity {
                         try {
                             JSONObject body = response.getJSONObject("body");
                             word = body.getString("Word");
-                            Log.v("TEST", "intents: " + intents + " word: " + word);
-                            Log.v("TEST", "length: " + word.length() + " score: " + getScore());
                             setSolution();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -106,17 +99,14 @@ public class GameClass extends AppCompatActivity {
             buttonTryPlaceLetter(letter.charAt(0));
             intents++;
             checkIfComplete(solution);
-            Log.v("TEST", "intents: " + intents + "word: " + word);
-            Log.v("TEST", "length: " + word.length() + "score: " + getScore());
         } else {
-            Toast toast = Toast.makeText(this, "Incorrect input", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this, getString(R.string.toast_invalid_input), Toast.LENGTH_LONG);
             toast.show();
         }
         editTextLetter.setText("");
     }
 
     private boolean checkIfLetter(String input) {
-        Log.v("TryButton", "Letter: " + input);
 
         if (input.equals(null))
             return false;
@@ -145,7 +135,7 @@ public class GameClass extends AppCompatActivity {
         String guess = editTextGuess.getText().toString();
 
         if (!checkIfComplete(guess)) {
-            Toast toast = Toast.makeText(this, "You Lost, game finished", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this, getString(R.string.toast_defeat), Toast.LENGTH_LONG);
             toast.show();
             endGame(false);
             finish();
@@ -157,7 +147,7 @@ public class GameClass extends AppCompatActivity {
 
     private boolean checkIfComplete(String possibleSolution) {
         if (possibleSolution.equals(word)) {
-            Toast toast = Toast.makeText(this, "VICTORY", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this, getString(R.string.toast_victory), Toast.LENGTH_LONG);
             endGame(true);
             toast.show();
             return true;
@@ -171,7 +161,7 @@ public class GameClass extends AppCompatActivity {
         else
             user.setScore(0);
 
-        viewModel.insert(user);
+        viewModel.insert(user.getNickname(), user.getScore());
         finish();
     }
 

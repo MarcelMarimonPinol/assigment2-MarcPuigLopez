@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">practica2</string>
+    <string name="nickname_hint">nickname</string>
+    <string name="user_hint">user</string>
+    <string name="startgame_button">START GAME</string>
+    <string name="guess_letter_textview">Guess a letter</string>
+    <string name="confirm_button">OK</string>
+    <string name="guess_word_textview">Guess a word</string>
+    <string name="word_hint">loading...</string>
+    <string name="score_textview">Score:</string>
+    <string name="gamesplayed_textview">GamesPlayed:</string>
+    <string name="gameid_textview">GameId:</string>
+    <string name="toast_invalid_nickname">Invalid Nickname</string>
+    <string name="toast_invalid_input">Invalid Input</string>
+    <string name="toast_victory">Congratulations, you won</string>
+    <string name="toast_defeat">You Lost, game finished</string>
 </resources>

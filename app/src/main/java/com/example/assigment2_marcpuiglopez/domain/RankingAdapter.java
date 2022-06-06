@@ -1,6 +1,6 @@
 package com.example.assigment2_marcpuiglopez.domain;
 
-import android.util.Log;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,18 +10,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assigment2_marcpuiglopez.R;
+import com.example.assigment2_marcpuiglopez.UserClick;
 
 import java.util.Collections;
 import java.util.List;
 
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
-    private List<User> data = Collections.emptyList();
-    private static ClickListener clickListener;
+public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder> {
+    private List<UserEntity> data = Collections.emptyList();
+    private static UserClick clickListener;
 
-    public UserAdapter() {
+    public RankingAdapter(final Context context, final UserClick clickUserItemListener) {
+        this.clickListener = clickUserItemListener;
     }
 
-    public void setUsers(List<User> data) {
+    public void setUsers(List<UserEntity> data) {
         this.data = data;
         notifyDataSetChanged();
     }
@@ -36,9 +38,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User currentUser = data.get(position);
-        holder.nickname.setText(currentUser.getNickname());
-        holder.score.setText(String.valueOf(currentUser.getScore()));
+        UserEntity userEntity = data.get(position);
+
+        holder.itemView.setOnClickListener(v ->
+                clickListener.onUserClicked(new User(
+                        userEntity.gameId,
+                        userEntity.nickname,
+                        userEntity.score
+        )));
+
+        holder.nickname.setText(userEntity.nickname);
+        holder.score.setText(String.valueOf(userEntity.score));
+        holder.gamesPlayed.setText(String.valueOf(userEntity.gameId));
     }
 
     @Override
@@ -47,28 +58,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         return data.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nickname;
         public TextView score;
+        public TextView gamesPlayed;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nickname = itemView.findViewById(R.id.nickname);
             score = itemView.findViewById(R.id.score);
+            gamesPlayed = itemView.findViewById(R.id.gamesPlayed);
         }
-
-        @Override
-        public void onClick(View v) {
-            clickListener.onItemClick(getLayoutPosition(), v);
-        }
-
-    }
-
-    public void setOnItemClickListener(ClickListener clickListener) {
-        UserAdapter.clickListener = clickListener;
-    }
-
-    public interface ClickListener {
-        void onItemClick(int position, View v);
     }
 }
