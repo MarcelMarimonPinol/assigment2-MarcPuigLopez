@@ -25,6 +25,10 @@ public class UserViewModel extends AndroidViewModel {
         return allUsers;
     }
 
+    public int getGamesPlayed() {
+        return repository.g;
+    }
+
     public void insert(User user) {
         repository.setUser(user);
     }

@@ -1,6 +1,8 @@
 package com.example.assigment2_marcpuiglopez;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -46,5 +48,20 @@ public class RankingClass extends AppCompatActivity {
 
         userAdapter = new UserAdapter();
         ranking.setAdapter(userAdapter);
+
+        clikListenerHistoryClass();
+    }
+
+    public void clikListenerHistoryClass() {
+        userAdapter.setOnItemClickListener((position, v) -> {
+            Intent i = new Intent(this, HistoryClass.class);
+            ArrayList<User> list_player = new ArrayList<User>();
+
+            User user = viewModel.getAllUsers().getValue().get(position);
+
+            i.putExtra("INFO", (Parcelable) user);
+
+            startActivity(i);
+        });
     }
 }

@@ -20,19 +20,11 @@ public class User {
     @NonNull
     public int score;
 
-    public User() {
-        this.nickname = "";
-        this.score = 0;
-    }
 
     public User(String nickname) {
         this.nickname = nickname;
         this.score = 0;
-    }
-
-    public User(String nickname, int score) {
-        this.nickname = nickname;
-        this.score = score;
+        this.gamesPlayed = 0;
     }
 
     public String getNickname() {
@@ -51,12 +43,11 @@ public class User {
         this.score = score;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "gamesPlayed=" + gamesPlayed +
-                ", nickname='" + nickname + '\'' +
-                ", score=" + score +
-                '}';
+    public int getGamesPlayed() {
+        return gamesPlayed;
+    }
+
+    public void setGamesPlayed(int gamesPlayed) {
+        this.gamesPlayed = gamesPlayed;
     }
 }

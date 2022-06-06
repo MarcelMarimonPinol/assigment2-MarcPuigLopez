@@ -29,20 +29,6 @@ public class DatabaseController {
         new insertAsyncTask(userDAO).execute(user);
     }
 
-    /*private static class insertAsyncTask extends AsyncTask<Todo, Void, Void> {
-        private TodoDao asyncDao;
-
-        insertAsyncTask(TodoDao dao) {
-            asyncDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(Todo... todos) {
-            asyncDao.insertTodo(todos[0]);
-            return null;
-        }
-    }*/
-
     private static class insertAsyncTask {
         private UserDAO asyncDao;
         private Executor executor = Executors.newSingleThreadExecutor();

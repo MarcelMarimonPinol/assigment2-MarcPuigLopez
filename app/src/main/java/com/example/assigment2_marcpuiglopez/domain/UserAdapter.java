@@ -16,6 +16,7 @@ import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private List<User> data = Collections.emptyList();
+    private static ClickListener clickListener;
 
     public UserAdapter() {
     }
@@ -36,9 +37,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User currentUser = data.get(position);
-        Log.v("TEST", "holder: " + holder);
-        Log.v("TEST", "user: " + currentUser);
-        holder.nickname.setText(currentUser.getNickname() + "1");
+        holder.nickname.setText(currentUser.getNickname());
         holder.score.setText(String.valueOf(currentUser.getScore()));
     }
 
@@ -48,7 +47,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         return data.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView nickname;
         public TextView score;
 
@@ -59,11 +58,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }
 
         @Override
-        public String toString() {
-            return "ViewHolder{" +
-                    "nickname=" + nickname +
-                    ", score=" + score +
-                    '}';
+        public void onClick(View v) {
+            clickListener.onItemClick(getLayoutPosition(), v);
         }
+
+    }
+
+    public void setOnItemClickListener(ClickListener clickListener) {
+        UserAdapter.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
     }
 }

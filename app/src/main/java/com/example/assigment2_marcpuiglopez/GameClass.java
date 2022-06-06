@@ -74,7 +74,8 @@ public class GameClass extends AppCompatActivity {
                         try {
                             JSONObject body = response.getJSONObject("body");
                             word = body.getString("Word");
-                            Log.v("TEST", "word: " + word);
+                            Log.v("TEST", "intents: " + intents + " word: " + word);
+                            Log.v("TEST", "length: " + word.length() + " score: " + getScore());
                             setSolution();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -105,6 +106,8 @@ public class GameClass extends AppCompatActivity {
             buttonTryPlaceLetter(letter.charAt(0));
             intents++;
             checkIfComplete(solution);
+            Log.v("TEST", "intents: " + intents + "word: " + word);
+            Log.v("TEST", "length: " + word.length() + "score: " + getScore());
         } else {
             Toast toast = Toast.makeText(this, "Incorrect input", Toast.LENGTH_LONG);
             toast.show();
@@ -144,7 +147,7 @@ public class GameClass extends AppCompatActivity {
         if (!checkIfComplete(guess)) {
             Toast toast = Toast.makeText(this, "You Lost, game finished", Toast.LENGTH_LONG);
             toast.show();
-            endGame();
+            endGame(false);
             finish();
         } else {
             textViewWord.setText(guess);
@@ -155,16 +158,28 @@ public class GameClass extends AppCompatActivity {
     private boolean checkIfComplete(String possibleSolution) {
         if (possibleSolution.equals(word)) {
             Toast toast = Toast.makeText(this, "VICTORY", Toast.LENGTH_LONG);
-            endGame();
+            endGame(true);
             toast.show();
+            return true;
         }
         return false;
     }
 
-    private void endGame() {
-        int score = ((word.length() - intents) / word.length())*10;
-        user.setScore(score);
+    private void endGame(boolean win) {
+        if (win)
+            user.setScore(getScore());
+        else
+            user.setScore(0);
+
         viewModel.insert(user);
         finish();
+    }
+
+    private int getScore() {
+        double score;
+        score = word.length() - intents;
+        score /= word.length();
+        score *= 10;
+        return (int)score;
     }
 }
